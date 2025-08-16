@@ -29,26 +29,42 @@ A full-stack web application for browsing and searching coding interview questio
 
 ```
 webgeekhaven/
-├── client/                 # Frontend React application
+├── client/                     # Frontend React application
 │   ├── src/
-│   │   ├── App.jsx        # Main React component
-│   │   ├── main.jsx       # Application entry point
-│   │   └── index.css      # Global styles and utilities
-│   ├── index.html         # HTML template
-│   └── package.json       # Frontend dependencies
-├── server/                 # Backend API server
-│   ├── models/            # MongoDB schemas
-│   │   ├── Category.js    # Category model
-│   │   ├── Question.js    # Question model
-│   │   └── User.js        # User model (authentication ready)
-│   ├── controllers/       # Route handlers
-│   ├── routes/            # API routes
-│   ├── config/            # Database and environment config
-│   ├── seeders/           # Database seeding scripts
-│   ├── server.js          # Main server file
-│   └── package.json       # Backend dependencies
-├── start-dev.sh           # Development startup script
-└── README.md             # Project documentation
+│   │   ├── App.jsx             # Main React component
+│   │   ├── main.jsx            # Application entry point
+│   │   └── index.css           # Global styles
+│   ├── index.html              # HTML template
+│   └── package.json            # Frontend dependencies
+│
+├── server/                     # Backend API server
+│   ├── config/                 # Database and environment config
+│   ├── controllers/            # Route handlers
+│   ├── middleware/             # Middleware (auth, validation, etc.)
+│   ├── models/                 # MongoDB schemas
+│   │   ├── Category.js
+│   │   ├── Question.js
+│   │   └── User.js
+│   ├── routes/                 # API routes
+│   ├── utils/                  # Utility/helper functions
+│   ├── seeders/                # Database seeding scripts
+│   │   └── seeder.js
+│   ├── server.js               # Main server file
+│   ├── server-backup.js        # Backup server version
+│   ├── server-minimal.js       # Minimal server setup
+│   ├── server-revised.js       # Revised server version
+│   ├── test-api.js             # API test script
+│   ├── test-db-connection.js   # DB connection test
+│   ├── package.json            # Backend dependencies
+│   ├── package-lock.json
+│   ├── .env.example            # Example env file
+│   └── .env                    # Environment variables (ignored by git)
+│
+├── start-dev.sh                # Development startup script
+├── vite.config.js              # Vite config for frontend
+├── .gitignore                  # Git ignore file
+└── README.md                   # Project documentation
+
 ```
 
 ## Getting Started
