@@ -333,10 +333,15 @@ function App() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
-        <div className="text-center">
-          <Loader2 size={40} className="animate-spin mx-auto mb-4" style={{color: '#0284c7'}} />
-          <p className="text-slate-600">Loading your question feast...</p>
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="glass-card text-center p-8">
+          <div className="loading-spinner mx-auto mb-4"></div>
+          <p className="text-glass font-medium text-lg">Loading your question feast...</p>
+          <div className="mt-4">
+            <div className="pulse" style={{color: 'rgba(255, 255, 255, 0.6)'}}>
+              ✨ Preparing something magical ✨
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -344,16 +349,16 @@ function App() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
-        <div className="text-center max-w-md mx-auto px-6">
-          <AlertCircle size={48} className="mx-auto mb-4" style={{color: '#ef4444'}} />
-          <h2 className="text-xl font-semibold text-slate-800 mb-2">Connection Error</h2>
-          <p className="text-slate-600 mb-6">{error}</p>
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="error-state max-w-md mx-auto">
+          <AlertCircle size={48} className="mx-auto mb-4" style={{color: '#ff6b6b'}} />
+          <h2 className="text-xl font-semibold text-glass mb-2">🚫 Connection Error</h2>
+          <p className="text-glass-secondary mb-6">{error}</p>
           <button 
             onClick={loadCategories}
-            className="btn-primary px-6 py-2"
+            className="neon-btn"
           >
-            Try Again
+            ✨ Try Again ✨
           </button>
         </div>
       </div>
@@ -361,15 +366,15 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b sticky top-0 z-10">
+      <header className="hero-header shadow-lg sticky top-0 z-10">
         <div className="container py-6">
           <div className="text-center mb-6">
-            <h1 className="text-3xl font-bold text-slate-800 mb-2">
-              🍽️ Frontend Feast
+            <h1 className="text-4xl font-bold text-white glow-text mb-2">
+              🚀 Frontend Feast
             </h1>
-            <p className="text-slate-600">The Interactive Q&A Explorer</p>
+            <p className="text-glass-secondary text-lg font-medium">The Interactive Q&A Explorer ✨</p>
           </div>
           
           {/* Search Bar */}
@@ -393,14 +398,13 @@ function App() {
           
           {searchMode && (
             <div className="mt-4 text-center">
-              <p className="text-sm text-slate-600">
+              <p className="text-sm text-glass-secondary">
                 Found {filteredQuestions.length} result{filteredQuestions.length !== 1 ? 's' : ''} for "{searchQuery}"
                 <button 
                   onClick={() => {setSearchQuery(''); setSearchMode(false);}}
-                  className="ml-2 underline"
-                  style={{color: '#0284c7'}}
+                  className="ml-2 underline text-glass hover:text-white transition-colors"
                 >
-                  Clear search
+                  Clear search ✨
                 </button>
               </p>
             </div>
