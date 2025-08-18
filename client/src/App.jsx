@@ -34,9 +34,10 @@ function App() {
       const response = await questionsAPI.getAllCategories();
       setCategories(response);
       
-      // Auto-expand first category
+      // Auto-expand first few categories to show more questions
       if (response.length > 0) {
-        setExpandedCategories(new Set([response[0]._id]));
+        const expandedIds = response.slice(0, 3).map(cat => cat._id); // Expand first 3 categories
+        setExpandedCategories(new Set(expandedIds));
       }
     } catch (err) {
       setError('Failed to load categories. Please make sure your backend server is running on http://localhost:5000');
@@ -70,49 +71,226 @@ function App() {
     setExpandedCategories(newExpanded);
   };
 
-  const QuestionCard = ({ question }) => (
-    <div className="card fade-in">
-      <h4 className="font-medium text-slate-800 mb-3 leading-relaxed">{question.title}</h4>
-      
-      <div className="flex gap-2" style={{flexWrap: 'wrap'}}>
-        {question.url?.yt_link && (
-          <a 
-            href={question.url.yt_link}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="link-red"
-          >
-            <Youtube size={14} />
-            <span>Video</span>
-          </a>
-        )}
+  const QuestionCard = ({ question }) => {
+    const [showLinks, setShowLinks] = useState(false);
+
+    const linkCards = [
+      {
+        key: 'youtube',
+        url: question.url?.yt_link,
+        title: 'Watch Tutorial',
+        subtitle: 'YouTube Video',
+        icon: <Youtube size={24} />,
+        bgGradient: 'linear-gradient(135deg, #ef4444, #dc2626)',
+        hoverBgGradient: 'linear-gradient(135deg, #dc2626, #b91c1c)',
+        description: 'Step-by-step video explanation'
+      },
+      {
+        key: 'problem1',
+        url: question.url?.p1_link,
+        title: 'Practice Problem',
+        subtitle: 'Platform 1',
+        icon: <Code2 size={24} />,
+        bgGradient: 'linear-gradient(135deg, #3b82f6, #2563eb)',
+        hoverBgGradient: 'linear-gradient(135deg, #2563eb, #1d4ed8)',
+        description: 'Solve on coding platform'
+      },
+      {
+        key: 'problem2',
+        url: question.url?.p2_link,
+        title: 'Alternative Practice',
+        subtitle: 'Platform 2',
+        icon: <ExternalLink size={24} />,
+        bgGradient: 'linear-gradient(135deg, #10b981, #059669)',
+        hoverBgGradient: 'linear-gradient(135deg, #059669, #047857)',
+        description: 'Try different platform'
+      }
+    ];
+
+    const availableLinks = linkCards.filter(link => link.url && link.url.trim() !== '');
+
+    return (
+      <div className="card fade-in">
+        <h4 className="font-medium text-slate-800 mb-3 leading-relaxed">{question.title}</h4>
         
-        {question.url?.p1_link && (
-          <a 
-            href={question.url.p1_link}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="link-blue"
-          >
-            <Code2 size={14} />
-            <span>Problem 1</span>
-          </a>
-        )}
+        {/* Show small link indicators */}
+        <div className="flex gap-2 mb-3" style={{flexWrap: 'wrap'}}>
+          {question.url?.yt_link && question.url.yt_link.trim() !== '' && (
+            <a 
+              href={question.url.yt_link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="link-red"
+            >
+              <Youtube size={14} />
+              <span>Video</span>
+            </a>
+          )}
+          
+          {question.url?.p1_link && question.url.p1_link.trim() !== '' && (
+            <a 
+              href={question.url.p1_link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="link-blue"
+            >
+              <Code2 size={14} />
+              <span>Problem 1</span>
+            </a>
+          )}
+          
+          {question.url?.p2_link && question.url.p2_link.trim() !== '' && (
+            <a 
+              href={question.url.p2_link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="link-green"
+            >
+              <ExternalLink size={14} />
+              <span>Problem 2</span>
+            </a>
+          )}
+        </div>
         
-        {question.url?.p2_link && (
-          <a 
-            href={question.url.p2_link}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="link-green"
+        {/* Toggle Button for Colorful Boxes */}
+        {availableLinks.length > 0 && (
+          <button
+            onClick={() => setShowLinks(!showLinks)}
+            style={{
+              background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+              color: 'white',
+              border: 'none',
+              borderRadius: '0.5rem',
+              padding: '0.5rem 1rem',
+              fontSize: '0.875rem',
+              fontWeight: '500',
+              cursor: 'pointer',
+              transition: 'all 0.2s ease',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              marginBottom: '1rem',
+              boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+            }}
+            onMouseOver={(e) => {
+              e.target.style.background = 'linear-gradient(135deg, #4f46e5, #7c3aed)';
+              e.target.style.transform = 'translateY(-1px)';
+              e.target.style.boxShadow = '0 8px 15px -3px rgba(0, 0, 0, 0.2)';
+            }}
+            onMouseOut={(e) => {
+              e.target.style.background = 'linear-gradient(135deg, #6366f1, #8b5cf6)';
+              e.target.style.transform = 'translateY(0)';
+              e.target.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1)';
+            }}
           >
-            <ExternalLink size={14} />
-            <span>Problem 2</span>
-          </a>
+            <BookOpen size={16} />
+            <span>{showLinks ? 'Hide' : 'Show'} Detailed Resources ({availableLinks.length})</span>
+            <div style={{
+              transform: showLinks ? 'rotate(180deg)' : 'rotate(0deg)',
+              transition: 'transform 0.2s ease'
+            }}>
+              <ChevronDown size={16} />
+            </div>
+          </button>
+        )}
+
+        {/* Colorful Link Boxes */}
+        {showLinks && (
+          <div 
+            className="slide-down" 
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+              gap: '1rem',
+              marginBottom: '1rem'
+            }}
+          >
+            {availableLinks.map((link) => (
+              <a
+                key={link.key}
+                href={link.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  background: link.bgGradient,
+                  color: 'white',
+                  padding: '1.5rem',
+                  borderRadius: '0.75rem',
+                  textDecoration: 'none',
+                  display: 'block',
+                  transition: 'all 0.3s ease',
+                  boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+                  position: 'relative',
+                  overflow: 'hidden'
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.background = link.hoverBgGradient;
+                  e.currentTarget.style.transform = 'translateY(-4px) scale(1.02)';
+                  e.currentTarget.style.boxShadow = '0 20px 25px -5px rgba(0, 0, 0, 0.2)';
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.background = link.bgGradient;
+                  e.currentTarget.style.transform = 'translateY(0) scale(1)';
+                  e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1)';
+                }}
+              >
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'flex-start',
+                  justifyContent: 'space-between',
+                  marginBottom: '0.75rem'
+                }}>
+                  <div style={{display: 'flex', alignItems: 'center', gap: '0.75rem'}}>
+                    <div style={{
+                      padding: '0.5rem',
+                      background: 'rgba(255, 255, 255, 0.2)',
+                      borderRadius: '0.5rem',
+                      backdropFilter: 'blur(4px)'
+                    }}>
+                      {link.icon}
+                    </div>
+                    <div>
+                      <h5 style={{fontSize: '1.125rem', fontWeight: '600', margin: 0}}>{link.title}</h5>
+                      <p style={{fontSize: '0.875rem', opacity: 0.9, margin: 0}}>{link.subtitle}</p>
+                    </div>
+                  </div>
+                  <div style={{opacity: 0.6}}>
+                    <ExternalLink size={20} />
+                  </div>
+                </div>
+                
+                <p style={{
+                  fontSize: '0.875rem',
+                  opacity: 0.8,
+                  lineHeight: 1.6,
+                  margin: 0,
+                  marginBottom: '1rem'
+                }}>{link.description}</p>
+                
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  fontSize: '0.875rem',
+                  fontWeight: '500',
+                  opacity: 0.9
+                }}>
+                  <span>Click to open</span>
+                  <div style={{
+                    width: '8px',
+                    height: '8px',
+                    background: 'rgba(255, 255, 255, 0.6)',
+                    borderRadius: '50%',
+                    animation: 'pulse 2s infinite'
+                  }}></div>
+                </div>
+              </a>
+            ))}
+          </div>
         )}
       </div>
-    </div>
-  );
+    );
+  };
 
   const CategoryAccordion = ({ category }) => {
     const isExpanded = expandedCategories.has(category._id);
