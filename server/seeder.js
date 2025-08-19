@@ -6,7 +6,6 @@ import Question from "./models/Question.js";
 
 dotenv.config();
 
-// Connect to MongoDB directly
 const connectDB = async () => {
   try {
     console.log('🔄 Connecting to MongoDB...');
@@ -32,7 +31,7 @@ const seedData = async () => {
 
     console.log('🌐 Fetching data from external API...');
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 15000); // 15s timeout
+    const timeoutId = setTimeout(() => controller.abort(), 15000); 
     
     const res = await fetch("https://test-data-gules.vercel.app/data.json", {
       signal: controller.signal
@@ -109,7 +108,6 @@ const seedData = async () => {
     console.error("❌ Seeder Error:", err.message);
     console.error(err);
   } finally {
-    // Always disconnect and exit
     try {
       await mongoose.disconnect();
       console.log('🔌 MongoDB disconnected');

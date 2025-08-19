@@ -5,15 +5,11 @@ import Question from './models/Question.js';
 import Category from './models/Category.js';
 import cors from 'cors';
 
-// Initialize Express
 const app = express();
 const PORT = config.port;
 
-// Middleware
 app.use(cors());
 app.use(express.json());
-
-// Health check route that doesn't depend on DB
 app.get('/health', (req, res) => {
   res.status(200).json({ 
     status: 'OK', 
@@ -22,10 +18,8 @@ app.get('/health', (req, res) => {
   });
 });
 
-// Configure routes - defined before DB connection
 app.get('/api/questions', async (req, res) => {
   try {
-    // Check if database is connected
     if (mongoose.connection.readyState !== 1) {
       return res.status(503).json({ 
         success: false,
@@ -47,7 +41,6 @@ app.get('/api/questions', async (req, res) => {
 
 app.get('/api/questions/search', async (req, res) => {
   try {
-    // Check if database is connected
     if (mongoose.connection.readyState !== 1) {
       return res.status(503).json({ 
         success: false,
@@ -75,7 +68,6 @@ app.get('/api/questions/search', async (req, res) => {
 
 app.get('/api/categories', async (req, res) => {
   try {
-    // Check if database is connected
     if (mongoose.connection.readyState !== 1) {
       return res.status(503).json({ 
         success: false,
@@ -91,31 +83,26 @@ app.get('/api/categories', async (req, res) => {
   }
 });
 
-// Start server immediately - don't wait for DB connection
 const server = app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
   console.log(`Health check: http://localhost:${PORT}/health`);
 });
 
-// Connect to MongoDB with timeout options
 const connectDB = async () => {
   try {
     console.log('Connecting to MongoDB...');
     await mongoose.connect(config.mongodb_url, {
-      serverSelectionTimeoutMS: 5000, // 5 second timeout
-      connectTimeoutMS: 10000      // 10 second timeout
+      serverSelectionTimeoutMS: 5000, 
+      connectTimeoutMS: 10000      
     });
     console.log('MongoDB Connected');
   } catch (error) {
     console.error(`MongoDB Connection Error: ${error.message}`);
-    // Don't exit the process - the server is already running
   }
 };
 
-// Connect to DB but don't block server startup
 connectDB();
 
-// Handle server shutdown
 process.on('SIGINT', async () => {
   try {
     await mongoose.disconnect();

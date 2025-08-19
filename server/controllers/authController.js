@@ -7,7 +7,6 @@ export const register = async (req, res) => {
     console.log('Register endpoint hit with data:', req.body);
     const { name, email, password } = req.body;
     
-    // Validate required fields
     if (!name || !email || !password) {
       console.log('Missing required fields');
       return res.status(400).json({ error: 'Name, email, and password are required' });
@@ -48,7 +47,6 @@ export const login = async (req, res) => {
     console.log('Login endpoint hit with data:', { email: req.body.email });
     const { email, password } = req.body;
     
-    // Validate required fields
     if (!email || !password) {
       console.log('Missing email or password');
       return res.status(400).json({ error: 'Email and password are required' });

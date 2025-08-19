@@ -6,7 +6,6 @@ import {
 
 const router = express.Router();
 
-// Public routes
 router.get("/", getAllQuestions);
 router.get("/search", searchQuestions);
 

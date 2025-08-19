@@ -1,7 +1,6 @@
 import Question from "../models/Question.js";
 import Category from "../models/Category.js";
 
-// GET all questions
 export const getAllQuestions = async (req, res) => {
   try {
     console.log('📋 GET /api/questions - Fetching all questions');
@@ -22,7 +21,6 @@ export const getAllQuestions = async (req, res) => {
   }
 };
 
-// GET questions with search functionality
 export const searchQuestions = async (req, res) => {
   try {
     console.log('🔍 Search request received:', req.query);

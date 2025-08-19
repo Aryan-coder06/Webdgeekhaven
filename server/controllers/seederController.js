@@ -5,7 +5,7 @@ import Question from '../models/Question.js';
 export const seedDatabase = async (req, res) => {
   try {
     console.log('🌱 Starting database seeding...');
-    // Clear existing data
+    
     await Category.deleteMany();
     await Question.deleteMany();
     console.log('🧹 Cleared existing data');
@@ -16,7 +16,6 @@ export const seedDatabase = async (req, res) => {
       const questions = [];
       
       for (const q of categoryData.ques) {
-        // Skip questions without title or with null/undefined title
         if (!q.title || q.title === null || q.title === undefined || 
             (typeof q.title === 'string' && q.title.trim() === '')) {
           console.warn('⚠️ Skipping question without title:', JSON.stringify(q));
@@ -36,8 +35,6 @@ export const seedDatabase = async (req, res) => {
         const savedQuestion = await newQuestion.save();
         questions.push(savedQuestion._id);
       }
-      
-      // Only create category if it has questions
       if (questions.length > 0) {
         const newCategory = new Category({
           title: categoryData.title,
