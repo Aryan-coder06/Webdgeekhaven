@@ -6,7 +6,8 @@ import Category from './models/Category.js';
 import cors from 'cors';
 
 const app = express();
-const PORT = config.port;
+const PORT = process.env.PORT || config.port || 5000;
+
 
 app.use(cors());
 app.use(express.json());

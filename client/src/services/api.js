@@ -1,15 +1,13 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:5000/api';
+const API_BASE_URL = 'https://webdgeekhaven.onrender.com/api';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
   timeout: 10000,
 });
 
-// API calls
 export const questionsAPI = {
-  // Get all questions
   getAllQuestions: async () => {
     try {
       const response = await api.get('/questions');
@@ -20,7 +18,6 @@ export const questionsAPI = {
     }
   },
 
-  // Search questions
   searchQuestions: async (query) => {
     try {
       const response = await api.get(`/questions/search?search=${encodeURIComponent(query)}`);
@@ -31,7 +28,6 @@ export const questionsAPI = {
     }
   },
 
-  // Get all categories
   getAllCategories: async () => {
     try {
       const response = await api.get('/categories');
